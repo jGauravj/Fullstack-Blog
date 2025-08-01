@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import "tailwindcss";
+@import "@flaticon/flaticon-uicons/css/all/all.css";
+
+@layer base {
+  :root {
+    --color-white: #ffffff;
+    --color-black: #242424;
+    --color-grey: #f3f3f3;
+    --color-dark-grey: #6b6b6b;
+    --color-red: #ff4e4e;
+    --color-transparent: transparent;
+    --color-twitter: #1da1f2;
+    --color-purple: #8b46ff;
+    --color-grey-80: rgba(243, 243, 243, 0.7);
+    --color-grey-50: rgba(243, 243, 243, 0.5);
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: "Inter", sans-serif;
+  }
+
+  .font-gelasio {
+    font-family: "Gelasio", serif;
+  }
+
+  .text-sm {
+    font-size: 12px;
+  }
+
+  .text-base {
+    font-size: 14px;
+  }
+
+  .text-xl {
+    font-size: 16px;
+  }
+
+  .text-2xl {
+    font-size: 20px;
+  }
+
+  .text-3xl {
+    font-size: 28px;
+  }
+
+  .text-4xl {
+    font-size: 38px;
+  }
+
+  .text-5xl {
+    font-size: 50px;
+  }
+}
+
+@layer components {
+  * {
+    @apply m-0 p-0 box-border text-base outline-purple-500/30 duration-100;
+  }
+  html {
+    @apply overflow-x-hidden;
+  }
+  body {
+    font-family: "Inter", sans-serif;
+    @apply font-normal text-black;
+  }
+  i {
+    @apply mt-0.5;
+  }
+  section {
+    @apply py-4 px-[5vw] md:px-[7vw] lg:px-[10vw];
+  }
+  ::selection {
+    @apply bg-purple-500/30;
+  }
+  img {
+    @apply w-full h-full object-cover;
+  }
+  .navbar {
+    @apply z-10 sticky top-0 flex items-center gap-12 w-full px-[5vw] py-5 h-[80px] border-b  bg-white;
+    border-color: var(--color-grey);
+  }
+  .h-cover {
+    @apply min-h-[calc(100vh-80px)];
+  }
+  .border-grey {
+    border-color: var(--color-grey);
+  }
+  .bg-grey {
+    background-color: var(--color-grey);
+  }
+  .text-dark-grey {
+    color: var(--color-dark-grey);
+  }
+  .center {
+    @apply block mx-auto;
+  }
+  .btn-dark {
+    @apply whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-xl capitalize hover:bg-black/80;
+  }
+  .btn-light {
+    @apply whitespace-nowrap rounded-full py-3 px-6 text-xl capitalize text-black;
+    background-color: var(--color-grey);
+  }
+  .btn-light:hover {
+    background-color: var(--color-grey-80);
+  }
+  .input-box {
+    @apply w-[100%] rounded-md p-4 pl-12 border focus:bg-transparent placeholder:text-black;
+    border-color: var(--color-grey);
+    background-color: var(--color-grey);
+  }
+  input:disabled,
+  input:disabled ~ .input-icon {
+    @apply opacity-50;
+  }
+  .input-icon {
+    @apply absolute left-4 top-1/2 -translate-y-1/2;
+  }
+  .link {
+    @apply hover:text-black p-3 px-4 block opacity-75;
+    color: var(--color-dark-grey);
+  }
+  .link:hover {
+    background-color: var(--color-grey);
+  }
+  .hide {
+    @apply opacity-0 pointer-events-none duration-100;
+  }
+  .show {
+    @apply opacity-100 pointer-events-auto;
+  }
+  .sidebar-link {
+    @apply flex gap-4 items-center py-5 hover:text-black;
+    color: var(--color-dark-grey);
+  }
+  .sidebar-link.active {
+    @apply text-black border-r-2 border-black pl-6  -ml-6 md:rounded-tl-lg md:rounded-bl-lg max-md:border-none;
+    background-color: var(--color-grey-50);
+  }
+  #textEditor h2,
+  h2 {
+    @apply text-4xl leading-normal font-bold max-md:text-3xl max-md:leading-snug;
+    font-family: "Inter", sans-serif;
+  }
+  #textEditor h3,
+  h3 {
+    @apply text-3xl leading-loose max-md:text-2xl max-md:leading-normal;
+    font-family: "Inter", sans-serif;
+  }
+  #textEditor *,
+  .blog-page-content * {
+    @apply text-xl leading-10 md:text-2xl;
+    font-family: "Gelasio", sans-serif;
+  }
+  .tag {
+    @apply p-3 rounded-full px-6 capitalize;
+    background-color: var(--color-grey);
+  }
+  .blog-title {
+    @apply text-2xl font-medium leading-7 line-clamp-3 sm:line-clamp-2;
+  }
+  .blog-index {
+    @apply text-4xl sm:text-3xl lg:text-5xl font-bold  leading-none;
+    color: var(--color-grey);
+  }
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: 900px;
+}
+
+.cdx-settings-button[data-tune="withBorder"],
+.cdx-settings-button[data-tune="withBackground"],
+.cdx-settings-button[data-tune="stretched"] {
+  display: none;
+}
