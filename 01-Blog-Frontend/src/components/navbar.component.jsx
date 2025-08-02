@@ -41,7 +41,7 @@ const Navbar = () => {
           <Link to="/signin" className="btn-dark py-2">
             Sign In
           </Link>
-          <Link to="/signin" className="btn-light py-2 hidden md:block">
+          <Link to="/signup" className="btn-light py-2 hidden md:block">
             Sign Up
           </Link>
         </div>
