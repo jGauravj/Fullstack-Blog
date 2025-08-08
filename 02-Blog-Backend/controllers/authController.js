@@ -194,7 +194,7 @@ const signinWithGoogle = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Google Sign-In successful!",
-        user,
+        user: formatDataToSend(user),
       });
     } else {
       // New user – sign up
@@ -212,7 +212,7 @@ const signinWithGoogle = async (req, res) => {
 
       await user.save();
 
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         message: "User signed up with Google successfully!",
         user: formatDataToSend(user),
