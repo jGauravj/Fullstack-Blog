@@ -3,6 +3,7 @@ const express = require("express");
 const connectToDB = require("./database/db");
 const signupRoute = require("./routers/signupRoute");
 const signinRoute = require("./routers/signupRoute");
+const signinwithgoogle = require("./routers/signupRoute");
 const cors = require("cors");
 
 const app = express();
@@ -18,6 +19,7 @@ connectToDB();
 //Routes
 app.use("/auth/", signupRoute);
 app.use("/auth/", signinRoute);
+app.use("/auth/", signinwithgoogle);
 
 // server running
 app.listen(PORT, () => {

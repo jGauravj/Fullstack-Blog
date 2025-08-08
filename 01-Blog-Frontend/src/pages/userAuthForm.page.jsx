@@ -1,20 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import InputBox from "../components/input.component";
 import googleIcon from "../imgs/google.png";
 import AnimationWrapper from "../common/page-Animation";
 import toast, { Toaster } from "react-hot-toast";
 // import {  useRef } from "react";
 import axios from "axios";
+import { storeInSession } from "../common/session";
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { authWithGoogle } from "../common/firebase";
 
 const UserAuthForm = ({ type }) => {
+  const {
+    userAuth: { access_token },
+    setUserAuth,
+  } = useContext(UserContext);
+
   const userAuthThroughServer = async (serverRoute, formData) => {
     try {
       const { data } = await axios.post(
         import.meta.env.VITE_SERVER_DOMAIN + serverRoute,
         formData
       );
-      console.log(data);
-      return data;
+      // user object store in session
+      storeInSession("user", JSON.stringify(data.user));
+
+      setUserAuth(data.user);
     } catch ({ response }) {
       toast.error(response.data.error);
     }
@@ -67,7 +78,26 @@ const UserAuthForm = ({ type }) => {
     userAuthThroughServer(serverRoute, formData);
   };
 
-  return (
+  const handleGoogleAuth = async (e) => {
+    try {
+      e.preventDefault();
+      const user = await authWithGoogle();
+      const serverRoute = "/auth/signinwithgoogle";
+
+      const formData = {
+        access_token: user.accessToken,
+      };
+
+      userAuthThroughServer(serverRoute, formData);
+    } catch (error) {
+      toast.error("Trouble login through google:");
+      console.log(error);
+    }
+  };
+
+  return access_token ? (
+    <Navigate to="/" />
+  ) : (
     <AnimationWrapper keyValue={type}>
       <section className="h-cover flex items-center justify-center">
         <Toaster />
@@ -112,7 +142,10 @@ const UserAuthForm = ({ type }) => {
             <hr className="w-1/2 border-black" />
           </div>
 
-          <button className="btn-dark flex items-center justify-center gap-4 w-[90%] center">
+          <button
+            className="btn-dark flex items-center justify-center gap-4 w-[90%] center"
+            onClick={handleGoogleAuth}
+          >
             <img src={googleIcon} alt="google-icon" className="w-5" />
             continue with google
           </button>

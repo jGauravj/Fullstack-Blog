@@ -91,6 +91,7 @@
   .bg-grey {
     background-color: var(--color-grey);
   }
+
   .text-dark-grey {
     color: var(--color-dark-grey);
   }

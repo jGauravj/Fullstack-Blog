@@ -2,12 +2,16 @@ const bcrypt = require("bcrypt");
 const User = require("../Schema/User");
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
+const admin = require("firebase-admin");
+const serviceAccountKey = require("../fullstack-blog-ef4f4-firebase-adminsdk-fbsvc-dc0c32657f.json");
+const { getAuth } = require("firebase-admin/auth");
 
 // format the data to send -->
 const formatDataToSend = (user) => {
   const access_token = jwt.sign(
     { id: user._id },
-    process.env.SECRET_ACCESS_KEY
+    process.env.SECRET_ACCESS_KEY,
+    { expiresIn: "7d" }
   );
 
   return {
@@ -72,7 +76,7 @@ const signupUser = async (req, res) => {
     if (!passwordRegex.test(password)) {
       return res.status(403).json({
         success: false,
-        error:
+        message:
           "Password shoud be 6 to 20 characters long with a numaric, 1 lowercase and 1 uppercase letter",
       });
     }
@@ -103,7 +107,7 @@ const signupUser = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
-        error: "Email already exists",
+        message: "Email already exists",
       });
     }
     console.log("Signup Error: ", error.message);
@@ -118,9 +122,9 @@ const signinUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const isUserExisting = await User.findOne({ "personal_info.email": email });
+    const user = await User.findOne({ "personal_info.email": email });
 
-    if (!isUserExisting) {
+    if (!user) {
       return res.status(404).json({
         success: false,
         message: "Email not found",
@@ -129,7 +133,7 @@ const signinUser = async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      isUserExisting.personal_info.password
+      user.personal_info.password
     );
 
     if (!isPasswordValid) {
@@ -142,7 +146,7 @@ const signinUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User signed in successfully",
-      data: formatDataToSend(isUserExisting),
+      user: formatDataToSend(user),
     });
   } catch (error) {
     console.error("Signin Error:", error.message);
@@ -153,4 +157,74 @@ const signinUser = async (req, res) => {
   }
 };
 
-module.exports = { signupUser, signinUser };
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccountKey),
+});
+
+const signinWithGoogle = async (req, res) => {
+  try {
+    const { access_token } = req.body;
+
+    const decodedToken = await getAuth().verifyIdToken(access_token);
+
+    if (!decodedToken) {
+      return res.status(403).json({
+        success: false,
+        message: "Sign-In with Google did not succeed!",
+      });
+    }
+
+    const { email, name, picture: originalPicture } = decodedToken;
+    const highQuilityPicture = originalPicture?.replace("s96-c", "s384-c");
+
+    let user = await User.findOne({ "personal_info.email": email }).select(
+      "personal_info.fullname personal_info.username personal_info.profile_img google_auth"
+    );
+
+    if (user) {
+      // login
+      if (!user.google_auth) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "This email signed up without google. Please log in with password to access the account",
+        });
+      }
+      // Successful Google login
+      return res.status(200).json({
+        success: true,
+        message: "Google Sign-In successful!",
+        user,
+      });
+    } else {
+      // New user – sign up
+      let username = await generateUsername(email);
+
+      user = new User({
+        personal_info: {
+          fullname: name,
+          email,
+          profile_img: highQuilityPicture,
+          username,
+        },
+        google_auth: true,
+      });
+
+      await user.save();
+
+      return res.status(201).json({
+        success: true,
+        message: "User signed up with Google successfully!",
+        user: formatDataToSend(user),
+      });
+    }
+  } catch (error) {
+    console.error("Signin Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error! Please try again later.",
+    });
+  }
+};
+
+module.exports = { signupUser, signinUser, signinWithGoogle };
