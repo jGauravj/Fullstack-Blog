@@ -131,23 +131,31 @@ const signinUser = async (req, res) => {
       });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      user.personal_info.password
-    );
+    if (!user.google_auth) {
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        user.personal_info.password
+      );
 
-    if (!isPasswordValid) {
-      return res.status(401).json({
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid Password",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "User signed in successfully",
+        user: formatDataToSend(user),
+      });
+    } else {
+      return res.status(403).json({
         success: false,
-        message: "Invalid Password",
+        message:
+          "Account was created using google. Try logging in with google.",
       });
     }
-
-    return res.status(200).json({
-      success: true,
-      message: "User signed in successfully",
-      user: formatDataToSend(user),
-    });
   } catch (error) {
     console.error("Signin Error:", error.message);
     res.status(500).json({

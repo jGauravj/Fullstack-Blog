@@ -27,7 +27,7 @@ const UserAuthForm = ({ type }) => {
 
       setUserAuth(data.user);
     } catch ({ response }) {
-      toast.error(response.data.error);
+      toast.error(response.data.message);
     }
   };
 
