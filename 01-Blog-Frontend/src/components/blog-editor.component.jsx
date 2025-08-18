@@ -3,12 +3,35 @@ import logo from "../imgs/logo.png";
 import AnimationWrapper from "../common/page-Animation";
 import defaultBanner from "../imgs/blog-banner.png";
 import axios from "axios";
-import { useRef } from "react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { EditorContext } from "../pages/editor.pages";
+import EditorJS from "@editorjs/editorjs";
+import { tools } from "./tools.component";
+import toast, { Toaster } from "react-hot-toast";
 
 const BlogEditor = () => {
   const [loading, setLoading] = useState(false);
-  const bannerRef = useRef();
+
+  let {
+    blog,
+    blog: { title, banner, content, tags, des },
+    setBlog,
+    textEditor,
+    setTextEditor,
+    editorState,
+    setEditorState,
+  } = useContext(EditorContext);
+
+  useEffect(() => {
+    setTextEditor(
+      new EditorJS({
+        holderId: "textEditor",
+        data: "",
+        tools: tools,
+        placeholder: "Let's write an awesome story",
+      })
+    );
+  }, []);
 
   const handleBannerUpload = async (e) => {
     let img = e.target.files?.[0];
@@ -28,10 +51,7 @@ const BlogEditor = () => {
           },
         }
       );
-      // update the banner
-      bannerRef.current.src = data.file.path;
-      e.target.value = "";
-      console.log(data);
+      setBlog({ ...blog, banner: data?.file?.path });
     } catch (error) {
       console.error("Error uploading banner", error);
     } finally {
@@ -48,21 +68,51 @@ const BlogEditor = () => {
 
   const handleTitleChange = (e) => {
     let input = e.target;
-
     input.style.height = "auto";
     input.style.height = input.scrollHeight + "px";
+    setBlog({ ...blog, title: input.value });
+  };
+
+  const handlePublishEvent = () => {
+    if (!banner) {
+      return toast.error("Upload a blog banner to publish it");
+    }
+    if (!title.length) {
+      return toast.error("Write blog title to publish it");
+    }
+
+    if (textEditor.isReady) {
+      textEditor
+        .save()
+        .then((data) => {
+          if (data.blocks.length) {
+            setBlog({ ...blog, content: data });
+            setEditorState("publish");
+          } else {
+            return toast.error("Write somthing in your blog to publish");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
     <>
+      <Toaster />
       <nav className="navbar">
         <Link to="/" className="flex-none w-9">
           <img src={logo} alt="logo" />
         </Link>
-        <p className="max-md:hidden text-black line-clamp-1 w-full">New blog</p>
+        <p className="max-md:hidden text-black line-clamp-1 w-full">
+          {title.length ? title : "New Blog"}
+        </p>
 
         <div className="flex gap-4 ml-auto ">
-          <button className="btn-dark py-2 ">Publish</button>
+          <button className="btn-dark py-2 " onClick={handlePublishEvent}>
+            Publish
+          </button>
           <button className="btn-light py-2 ">Save Draft</button>
         </div>
       </nav>
@@ -77,9 +127,9 @@ const BlogEditor = () => {
               >
                 {/* Banner image */}
                 <img
-                  ref={bannerRef}
-                  src={defaultBanner}
-                  alt="default banner"
+                  src={banner ? banner : defaultBanner}
+                  // onError={handleError}
+                  alt="blog banner"
                   className={`rounded-xl w-full h-full object-cover transition duration-300 ${
                     loading ? "blur-sm" : ""
                   }`}
@@ -142,10 +192,15 @@ const BlogEditor = () => {
 
             <textarea
               placeholder="Blog Title"
-              className="text-4xl font-medium w-full bg-red-400 h-20 resize-none mt-10 leading-tight "
+              className="text-4xl font-medium w-full h-20 resize-none mt-10 leading-tight "
               onKeyDown={handleTitleKeyDown}
               onChange={handleTitleChange}
+              value={title}
             ></textarea>
+
+            <hr className="w-full opacity-10 my-5" />
+
+            <div id="textEditor" className="font-gelasio"></div>
           </div>
         </section>
       </AnimationWrapper>
