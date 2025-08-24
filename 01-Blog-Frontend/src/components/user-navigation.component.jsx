@@ -23,7 +23,7 @@ const UserNavigationPanel = () => {
       <div className="bg-white absolute right-0 border border-grey w-60 duration-200">
         <Link to="/editor" className=" flex gap-2 link md:hidden pl-8 py-4">
           <i className="fi fi-rr-file-edit"></i>
-          <p>Write</p>
+          <p className="text-base">Write</p>
         </Link>
         <Link to={`/user/${username}`} className="link pl-8 py-4">
           Profile
@@ -41,7 +41,7 @@ const UserNavigationPanel = () => {
           className=" text-left p-4 hover:bg-gray-100 w-full pl-8 py-4 cursor-pointer"
           onClick={signOutUser}
         >
-          <h1 className=" font-bold text-xl mb-1">Sign Out</h1>
+          <h1 className=" font-bold text-base mb-1">Sign Out</h1>
           <p className="text-dark-grey">@{username}</p>
         </button>
       </div>

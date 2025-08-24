@@ -5,6 +5,7 @@ const signupRoute = require("./routers/signupRoute");
 const signinRoute = require("./routers/signupRoute");
 const signinwithgoogle = require("./routers/signupRoute");
 const uploadRoute = require("./routers/uploadRoute");
+const createBlogRoute = require("./routers/createBlogRoute");
 const cors = require("cors");
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/auth/", signupRoute);
 app.use("/auth/", signinRoute);
 app.use("/auth/", signinwithgoogle);
 app.use("/api", uploadRoute);
+app.use("/api", createBlogRoute);
 
 // server running
 app.listen(PORT, () => {

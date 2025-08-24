@@ -26,7 +26,7 @@
     font-family: "Gelasio", serif;
   }
 
-  .text-sm {
+  /* .text-sm {
     font-size: 12px;
   }
 
@@ -52,7 +52,7 @@
 
   .text-5xl {
     font-size: 50px;
-  }
+  } */
 }
 
 @layer components {
@@ -79,7 +79,7 @@
     @apply w-full h-full object-cover;
   }
   .navbar {
-    @apply z-10 sticky top-0 flex items-center gap-12 w-full px-[5vw] py-5 h-[80px] border-b  bg-white;
+    @apply z-10 sticky top-0 flex items-center gap-12 w-full px-[5vw] py-5 h-[70px] md:h-[80px] border-b  bg-white;
     border-color: var(--color-grey);
   }
   .h-cover {
@@ -99,10 +99,10 @@
     @apply block mx-auto;
   }
   .btn-dark {
-    @apply whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-xl capitalize hover:bg-black/80;
+    @apply whitespace-nowrap bg-black text-white rounded-full py-3 px-6 text-base capitalize hover:bg-black/80;
   }
   .btn-light {
-    @apply whitespace-nowrap rounded-full py-3 px-6 text-xl capitalize text-black;
+    @apply whitespace-nowrap rounded-full py-3 px-6 text-base capitalize text-black;
     background-color: var(--color-grey);
   }
   .btn-light:hover {
@@ -121,7 +121,7 @@
     @apply absolute left-4 top-1/2 -translate-y-1/2;
   }
   .link {
-    @apply hover:text-black p-3 px-4 block opacity-75;
+    @apply hover:text-black p-2.5 px-4 block opacity-75;
     color: var(--color-dark-grey);
   }
   .link:hover {
