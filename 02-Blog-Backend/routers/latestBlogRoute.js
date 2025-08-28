@@ -3,6 +3,6 @@ const latestBlog = require("../controllers/latestBlogController");
 
 const router = express.Router();
 
-router.get("/latest-blogs", latestBlog);
+router.post("/latest-blogs", latestBlog);
 
 module.exports = router;

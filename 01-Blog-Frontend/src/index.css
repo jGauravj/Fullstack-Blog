@@ -157,7 +157,7 @@
     font-family: "Gelasio", sans-serif;
   }
   .tag {
-    @apply p-3 rounded-full px-6 capitalize;
+    @apply p-2 rounded-full px-5 capitalize;
     background-color: var(--color-grey);
   }
   .blog-title {

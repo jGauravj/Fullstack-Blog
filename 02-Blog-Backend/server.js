@@ -7,6 +7,9 @@ const signinwithgoogle = require("./routers/signupRoute");
 const uploadRoute = require("./routers/uploadRoute");
 const createBlogRoute = require("./routers/createBlogRoute");
 const latestBlogRoute = require("./routers/latestBlogRoute");
+const trendingBlogRoute = require("./routers/trendingBlogRoute");
+const searchBlogRoute = require("./routers/searchBlogRoute");
+const allLatestBlogsCountRoute = require("./routers/allLatestBlogsCountRoute");
 const cors = require("cors");
 
 const app = express();
@@ -26,6 +29,9 @@ app.use("/auth/", signinwithgoogle);
 app.use("/api", uploadRoute);
 app.use("/api", createBlogRoute);
 app.use("/api", latestBlogRoute);
+app.use("/api", trendingBlogRoute);
+app.use("/api", searchBlogRoute);
+app.use("/api", allLatestBlogsCountRoute);
 
 // server running
 app.listen(PORT, () => {
