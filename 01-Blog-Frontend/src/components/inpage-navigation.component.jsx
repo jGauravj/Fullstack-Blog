@@ -34,7 +34,7 @@ const InPageNavigation = ({
             <button
               ref={i == defaultActiveIndex ? activeTabRef : null}
               key={i}
-              className={`p-4 px-5 capitalize ${
+              className={`p-4 px-5 capitalize w-full ${
                 defaultHidden.includes(route) ? "md:hidden" : ""
               } ${inPageNavIndex == i ? "text-black" : "text-dark-grey"}`}
               onClick={(e) => {

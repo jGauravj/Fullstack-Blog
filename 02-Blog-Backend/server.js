@@ -10,6 +10,8 @@ const latestBlogRoute = require("./routers/latestBlogRoute");
 const trendingBlogRoute = require("./routers/trendingBlogRoute");
 const searchBlogRoute = require("./routers/searchBlogRoute");
 const allLatestBlogsCountRoute = require("./routers/allLatestBlogsCountRoute");
+const searchBlogCountRoute = require("./routers/searchBlogsCountRoute");
+const searchUsersRoute = require("./routers/searchUsersRoute");
 const cors = require("cors");
 
 const app = express();
@@ -32,6 +34,8 @@ app.use("/api", latestBlogRoute);
 app.use("/api", trendingBlogRoute);
 app.use("/api", searchBlogRoute);
 app.use("/api", allLatestBlogsCountRoute);
+app.use("/api", searchBlogCountRoute);
+app.use("/api", searchUsersRoute);
 
 // server running
 app.listen(PORT, () => {
