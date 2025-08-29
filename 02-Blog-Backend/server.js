@@ -13,6 +13,7 @@ const allLatestBlogsCountRoute = require("./routers/allLatestBlogsCountRoute");
 const searchBlogCountRoute = require("./routers/searchBlogsCountRoute");
 const searchUsersRoute = require("./routers/searchUsersRoute");
 const getProfileRoute = require("./routers/getProfileRoute");
+const getBlogsRoute = require("./routers/getBlogsRoute");
 const cors = require("cors");
 
 const app = express();
@@ -38,6 +39,7 @@ app.use("/api", allLatestBlogsCountRoute);
 app.use("/api", searchBlogCountRoute);
 app.use("/api", searchUsersRoute);
 app.use("/api", getProfileRoute);
+app.use("/api", getBlogsRoute);
 
 // server running
 app.listen(PORT, () => {
