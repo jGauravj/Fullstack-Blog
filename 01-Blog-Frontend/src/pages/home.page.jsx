@@ -61,7 +61,7 @@ const HomePage = () => {
       });
       setBlogs(formatedData);
     } catch (err) {
-      console.error("Error while searching blogs:", err);
+      console.error("Error while searching blogs:", err.message);
     }
   };
 

@@ -2,7 +2,7 @@ const Blog = require("../Schema/Blog");
 
 const searchBlogs = async (req, res) => {
   try {
-    let { tag, query, page } = req.body;
+    let { tag, query, author, page } = req.body;
 
     let findQuery;
 
@@ -10,6 +10,8 @@ const searchBlogs = async (req, res) => {
       findQuery = { tags: tag, draft: false };
     } else if (query) {
       findQuery = { draft: false, title: new RegExp(query, "i") };
+    } else if (author) {
+      findQuery = { author, draft: false };
     }
 
     let maxLimit = 2;

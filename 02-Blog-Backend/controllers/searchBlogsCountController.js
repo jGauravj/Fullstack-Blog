@@ -2,7 +2,7 @@ const Blog = require("../Schema/Blog");
 
 const searchBlogCount = async (req, res) => {
   try {
-    let { tag, query } = req.body;
+    let { tag, author, query } = req.body;
 
     let findQuery;
 
@@ -10,6 +10,8 @@ const searchBlogCount = async (req, res) => {
       findQuery = { tags: tag, draft: false };
     } else if (query) {
       findQuery = { draft: false, title: new RegExp(query, "i") };
+    } else if (author) {
+      findQuery = { author, draft: false };
     }
 
     let blogs = await Blog.countDocuments(findQuery);
