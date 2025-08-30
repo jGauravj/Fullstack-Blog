@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AnimationWrapper from "../common/page-Animation";
 import { Spinner } from "../common/spinner";
@@ -10,14 +10,18 @@ export const blogStructure = {
   title: "",
   des: "",
   content: [],
-  tags: [],
-  author: { personal_info: {} },
+  author: {
+    personal_info: {},
+  },
   banner: "",
   publishedAt: "",
 };
 
+export const BlogContext = createContext({});
+
 const BlogPage = () => {
   const [blog, setBlog] = useState(blogStructure);
+  const [similarBlog, setSimilarBlog] = useState(null);
   const [loading, setLoading] = useState(false);
   let { blog_id } = useParams();
 
@@ -38,7 +42,17 @@ const BlogPage = () => {
         import.meta.env.VITE_SERVER_DOMAIN + "/api/get-blogs",
         { blog_id }
       );
-      setBlog(res.data?.blog);
+      const fetchedBlog = res.data?.blog;
+      setBlog(fetchedBlog);
+
+      if (fetchedBlog?.tags?.length) {
+        let response = await axios.post(
+          import.meta.env.VITE_SERVER_DOMAIN + "/api/search-blogs",
+          { tag: fetchedBlog.tags[0], limit: 6 }
+        );
+        console.log("Similar blogs response:", response.data);
+        setSimilarBlog(response.data);
+      }
     } catch (err) {
       console.log("Error while geting blogs on BlogPage:", err.message);
     } finally {
@@ -57,32 +71,37 @@ const BlogPage = () => {
           <Spinner className="w-6 h-6" />
         </div>
       ) : (
-        <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
-          <img src={banner || null} alt="banner" className="aspect-video" />
+        <BlogContext.Provider value={{ blog, setBlog }}>
+          <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
+            <img src={banner || null} alt="banner" className="aspect-video" />
+            <div className="mt-12">
+              <h2>{title}</h2>
 
-          <div className="mt-12">
-            <h2>{title}</h2>
-
-            <div className="flex max-sm:flex-col justify-between my-8">
-              <div className="flex gap-5 items-start">
-                <img
-                  src={profile_img || null}
-                  alt="profile_img"
-                  className="w-12 h-12 rounded-full"
-                />
-                <p className=" capitalize">
-                  {fullname}
-                  <br />@
-                  <Link to={`/user/${author_username}`}>{author_username}</Link>
+              <div className="flex max-sm:flex-col justify-between my-8">
+                <div className="flex gap-5 items-start">
+                  <img
+                    src={profile_img || null}
+                    alt="profile_img"
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <p className=" capitalize">
+                    {fullname}
+                    <br />@
+                    <Link to={`/user/${author_username}`}>
+                      {author_username}
+                    </Link>
+                  </p>
+                </div>
+                <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">
+                  Published on {getDay(publishedAt)}
                 </p>
               </div>
-              <p className="text-dark-grey opacity-75 max-sm:mt-6 max-sm:ml-12 max-sm:pl-5">
-                Published on {getDay(publishedAt)}
-              </p>
             </div>
+            <BlogInteraction />
+            {/* Blog Content */}
+            <BlogInteraction />
           </div>
-          <BlogInteraction />
-        </div>
+        </BlogContext.Provider>
       )}
     </AnimationWrapper>
   );
