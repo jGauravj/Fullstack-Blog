@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 
 const BlogInteraction = () => {
-  const { blog, setBlog } = useContext(BlogContext);
+  const { blog } = useContext(BlogContext);
 
   // Check if blog data is available
   // if (!blog || !blog.activity) {
