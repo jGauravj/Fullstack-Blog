@@ -17,7 +17,7 @@ const getBlogsRoute = require("./routers/getBlogsRoute");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3006;
 
 //middlewares -->
 app.use(express.json());
