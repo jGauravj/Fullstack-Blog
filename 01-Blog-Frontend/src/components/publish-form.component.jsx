@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { EditorContext } from "../pages/editor.pages";
 import Tag from "./tags.component";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import { Spinner } from "../common/spinner";
 
@@ -21,6 +21,7 @@ const PublishForm = () => {
   } = useContext(UserContext);
 
   let navigate = useNavigate();
+  let { blog_id } = useParams();
 
   let characterLimit = 200;
   let tagLimit = 10;
@@ -94,7 +95,7 @@ const PublishForm = () => {
 
       const res = await axios.post(
         import.meta.env.VITE_SERVER_DOMAIN + "/api/create-blog",
-        blogObj,
+        { ...blogObj, id: blog_id },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,

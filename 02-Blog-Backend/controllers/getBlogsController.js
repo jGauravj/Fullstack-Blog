@@ -3,9 +3,9 @@ const User = require("../Schema/User");
 
 const getBlogsController = async (req, res) => {
   try {
-    let { blog_id } = req.body;
+    let { blog_id, draft, mode } = req.body;
 
-    let incrementVal = 1;
+    let incrementVal = mode != "edit" ? 1 : 0;
 
     let blog = await Blog.findOneAndUpdate(
       { blog_id },
@@ -22,6 +22,13 @@ const getBlogsController = async (req, res) => {
         $inc: { "account_info.total_reads": incrementVal },
       }
     );
+
+    if (blog.draft && !draft) {
+      res.status(500).json({
+        success: false,
+        message: "You can not access draft blogs",
+      });
+    }
 
     res.status(200).json({ blog });
   } catch (error) {

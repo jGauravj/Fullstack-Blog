@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import logo from "../imgs/logo.png";
 import AnimationWrapper from "../common/page-Animation";
 import defaultBanner from "../imgs/blog-banner.png";
@@ -16,6 +16,7 @@ const BlogEditor = () => {
   const [isDraft, setIsDraft] = useState(false);
 
   let navigate = useNavigate();
+  let { blog_id } = useParams();
 
   let {
     blog,
@@ -35,7 +36,7 @@ const BlogEditor = () => {
     setTextEditor(
       new EditorJS({
         holderId: "textEditor",
-        data: content,
+        data: Array.isArray(content) ? content[0] : content,
         tools: tools,
         placeholder: "Let's write an awesome story",
       })
@@ -127,7 +128,7 @@ const BlogEditor = () => {
 
       const res = await axios.post(
         import.meta.env.VITE_SERVER_DOMAIN + "/api/create-blog",
-        blogObj,
+        { ...blogObj, id: blog_id },
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
@@ -182,7 +183,7 @@ const BlogEditor = () => {
       <AnimationWrapper>
         <section>
           <div className="mx-auto max-w-[900px] w-full">
-            <div className="relative aspect-video rounded-xl bg-white border-4 border-grey overflow-hidden">
+            <div className="relative aspect-video rounded-lg bg-white border-4 border-grey overflow-hidden">
               <label
                 htmlFor="uploadBanner"
                 className="cursor-pointer block w-full h-full"
@@ -192,7 +193,7 @@ const BlogEditor = () => {
                   src={banner ? banner : defaultBanner}
                   // onError={handleError}
                   alt="blog banner"
-                  className={`rounded-xl w-full h-full object-cover transition duration-300 ${
+                  className={` w-full h-full object-cover transition duration-300 ${
                     loading ? "blur-sm" : ""
                   }`}
                 />

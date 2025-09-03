@@ -81,7 +81,6 @@ const List = ({ style, items }) => {
 
 const BlogContent = ({ block }) => {
   let { type, data } = block;
-  console.log(data);
 
   if (type == "paragraph") {
     return (
