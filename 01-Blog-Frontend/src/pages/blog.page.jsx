@@ -7,6 +7,7 @@ import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";
 import BlogPostCard from "../components/blog-post.component";
 import BlogContent from "../components/blog-content.component";
+import CommentsContainer from "../components/comments.container";
 
 export const blogStructure = {
   title: "",
@@ -25,6 +26,9 @@ const BlogPage = () => {
   const [blog, setBlog] = useState(blogStructure);
   const [similarBlog, setSimilarBlog] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isLikeByUser, setIsLikeByUser] = useState(false);
+  const [commentsWrapper, setCommentsWrapper] = useState(false);
+  const [totalPerentCommentsLoaded, setTotalParentCommentLoaded] = useState(0);
   let { blog_id } = useParams();
 
   let {
@@ -70,6 +74,9 @@ const BlogPage = () => {
     setBlog(blogStructure);
     setSimilarBlog(null);
     setLoading(true);
+    setIsLikeByUser(false);
+    // setCommentsWrapper(false);
+    setTotalParentCommentLoaded(0);
   };
 
   return (
@@ -79,7 +86,19 @@ const BlogPage = () => {
           <Spinner className="w-6 h-6" />
         </div>
       ) : (
-        <BlogContext.Provider value={{ blog, setBlog }}>
+        <BlogContext.Provider
+          value={{
+            blog,
+            setBlog,
+            isLikeByUser,
+            setIsLikeByUser,
+            commentsWrapper,
+            setCommentsWrapper,
+            totalPerentCommentsLoaded,
+            setTotalParentCommentLoaded,
+          }}
+        >
+          <CommentsContainer />
           <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
             <img src={banner || null} alt="banner" className="aspect-video" />
             <div className="mt-12">

@@ -14,6 +14,7 @@ const searchBlogCountRoute = require("./routers/searchBlogsCountRoute");
 const searchUsersRoute = require("./routers/searchUsersRoute");
 const getProfileRoute = require("./routers/getProfileRoute");
 const getBlogsRoute = require("./routers/getBlogsRoute");
+const likeBlogRoute = require("./routers/likeBlogRoute");
 const cors = require("cors");
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api", searchBlogCountRoute);
 app.use("/api", searchUsersRoute);
 app.use("/api", getProfileRoute);
 app.use("/api", getBlogsRoute);
+app.use("/api", likeBlogRoute);
 
 // server running
 app.listen(PORT, () => {

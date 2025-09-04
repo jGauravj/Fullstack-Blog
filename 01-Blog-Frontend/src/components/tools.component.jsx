@@ -18,7 +18,6 @@ const uploadImageByURL = (url) => {
 const uploadImageByFile = async (e) => {
   let file = e.target.files?.[0];
   if (!file) {
-    console.log("No file selected");
     return;
   }
   const formData = new FormData();
