@@ -7,7 +7,9 @@ import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";
 import BlogPostCard from "../components/blog-post.component";
 import BlogContent from "../components/blog-content.component";
-import CommentsContainer from "../components/comments.container";
+import CommentsContainer, {
+  fetchComments,
+} from "../components/comments.container";
 
 export const blogStructure = {
   title: "",
@@ -49,6 +51,12 @@ const BlogPage = () => {
         { blog_id }
       );
       const fetchedBlog = res.data?.blog;
+
+      fetchedBlog.comments = await fetchComments({
+        blog_id: fetchedBlog._id,
+        setParentCommentCountFun: setTotalParentCommentLoaded,
+      });
+
       setBlog(fetchedBlog);
 
       if (fetchedBlog?.tags?.length) {

@@ -1,13 +1,47 @@
 import { useContext } from "react";
 import { BlogContext } from "../pages/blog.page";
 import CommentField from "./comment-field";
+import axios from "axios";
+import NoDataMessage from "./nodata.component";
+import AnimationWrapper from "../common/page-Animation";
+import CommentCard from "./comment-card";
+
+export const fetchComments = async ({
+  skip = 0,
+  blog_id,
+  setParentCommentCountFun,
+  comment_array = null,
+}) => {
+  try {
+    const res = await axios.post(
+      import.meta.env.VITE_SERVER_DOMAIN + "/api/get-blog-comments",
+      { blog_id, skip }
+    );
+
+    res.data.forEach((comment) => (comment.childrenLevel = 0));
+
+    setParentCommentCountFun((prev) => prev + res.data.length);
+
+    if (comment_array == null) {
+      return { results: res.data };
+    } else {
+      return { results: [...comment_array, ...res.data] };
+    }
+  } catch (err) {
+    console.error("Error in fetch comments", err);
+    return { results: [] }; // fallback
+  }
+};
 
 const CommentsContainer = () => {
   let {
+    blog,
     blog: { title },
     commentsWrapper,
     setCommentsWrapper,
   } = useContext(BlogContext);
+
+  let commentArr = blog?.comments?.results;
 
   return (
     <div
@@ -31,6 +65,22 @@ const CommentsContainer = () => {
       <hr className="border-grey my-8 w-[120%] -ml-10" />
 
       <CommentField action="comment" />
+
+      {commentArr && commentArr.length ? (
+        commentArr.map((comment, i) => {
+          return (
+            <AnimationWrapper key={i}>
+              <CommentCard
+                index={i}
+                leftVal={comment.childrenLevel * 4}
+                commentData={comment}
+              />
+            </AnimationWrapper>
+          );
+        })
+      ) : (
+        <NoDataMessage message="No Comments" />
+      )}
     </div>
   );
 };
