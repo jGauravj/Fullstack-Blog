@@ -1,5 +1,5 @@
 import { Toaster, toast } from "react-hot-toast";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import { useContext, useState } from "react";
 import { EditorContext } from "../pages/editor.pages";
 import Tag from "./tags.component";

@@ -72,8 +72,6 @@ const CommentField = ({ action }) => {
         },
       });
 
-      console.log(data);
-
       setTotalParentCommentLoaded((prev) => prev + parentCommentIncrementVal);
     } catch (err) {
       console.log("Error while commenting", err);

@@ -3,7 +3,7 @@ import { BlogContext } from "../pages/blog.page";
 import CommentField from "./comment-field";
 import axios from "axios";
 import NoDataMessage from "./nodata.component";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import CommentCard from "./comment-card";
 
 export const fetchComments = async ({

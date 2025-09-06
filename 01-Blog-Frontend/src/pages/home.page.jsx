@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import InPageNavigation from "../components/inpage-navigation.component";
 import axios from "axios";
 import { Spinner } from "../common/spinner";

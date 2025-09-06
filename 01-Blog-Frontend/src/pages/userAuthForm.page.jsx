@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import InputBox from "../components/input.component";
 import googleIcon from "../imgs/google.png";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import toast, { Toaster } from "react-hot-toast";
 // import {  useRef } from "react";
 import axios from "axios";

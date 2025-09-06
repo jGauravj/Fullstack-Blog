@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import { Spinner } from "../common/spinner";
 import { getDay } from "../common/date";
 import BlogInteraction from "../components/blog-interaction.component";

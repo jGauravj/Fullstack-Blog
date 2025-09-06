@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import logo from "../imgs/logo.png";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import defaultBanner from "../imgs/blog-banner.png";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
