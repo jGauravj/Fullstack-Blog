@@ -36,12 +36,27 @@ export const fetchComments = async ({
 const CommentsContainer = () => {
   let {
     blog,
-    blog: { title },
+    blog: { _id, title },
     commentsWrapper,
     setCommentsWrapper,
+    totalPerentCommentsLoaded,
+    setTotalParentCommentLoaded,
+    setBlog,
   } = useContext(BlogContext);
 
   let commentArr = blog?.comments?.results;
+  const totalParentComments = blog.activity?.total_parent_comments || 0;
+
+  const handleLoadmoreComments = async () => {
+    let newCommentsArr = await fetchComments({
+      skip: totalPerentCommentsLoaded,
+      blog_id: _id,
+      setParentCommentCountFun: setTotalParentCommentLoaded,
+      comment_array: commentArr,
+    });
+
+    setBlog({ ...blog, comments: newCommentsArr });
+  };
 
   return (
     <div
@@ -80,6 +95,17 @@ const CommentsContainer = () => {
         })
       ) : (
         <NoDataMessage message="No Comments" />
+      )}
+
+      {totalParentComments > totalPerentCommentsLoaded ? (
+        <button
+          onClick={handleLoadmoreComments}
+          className="text-dark-grey p-2 px-3 hover:bg-gray-200/50 rounded-md flex items-center gap-2"
+        >
+          Load More
+        </button>
+      ) : (
+        ""
       )}
     </div>
   );

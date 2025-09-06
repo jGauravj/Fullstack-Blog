@@ -7,7 +7,7 @@ import { BlogContext } from "../pages/blog.page";
 const CommentField = ({ action }) => {
   const [comment, setComment] = useState("");
   let {
-    userAuth: { access_token, username, fullname, profile_img },
+    userAuth: { access_token },
   } = useContext(UserContext);
 
   let {
@@ -47,12 +47,12 @@ const CommentField = ({ action }) => {
       setComment("");
       let data = res.data;
 
-      data.personal_info = { username, profile_img, fullname };
+      // data.personal_info = { username, profile_img, fullname };
       data.childrenLevel = 0;
 
       // let newCommentedArr;
 
-      res.data.childrenLevel = 0;
+      // res.data.childrenLevel = 0;
 
       // newCommentedArr = [data];
 
@@ -60,7 +60,10 @@ const CommentField = ({ action }) => {
 
       setBlog({
         ...blog,
-        comments: { ...comments, results: [data] },
+        comments: {
+          ...comments,
+          results: [data, ...(comments?.results || [])],
+        },
         activity: {
           ...activity,
           total_comments: total_comments + 1,
@@ -68,6 +71,8 @@ const CommentField = ({ action }) => {
             total_parent_comments + parentCommentIncrementVal,
         },
       });
+
+      console.log(data);
 
       setTotalParentCommentLoaded((prev) => prev + parentCommentIncrementVal);
     } catch (err) {

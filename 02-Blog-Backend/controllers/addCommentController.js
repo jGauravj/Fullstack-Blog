@@ -24,33 +24,40 @@ const addComment = async (req, res) => {
 
     let commentFile = await commentObj.save();
 
-    let { comment: savedComment, commentedAt, children } = commentFile;
+    // Populate the comment with user data before returning
+    let populatedComment = await Comment.findById(commentFile._id).populate(
+      "commented_by",
+      "personal_info.username personal_info.fullname personal_info.profile_img"
+    );
+
+    // let { comment: savedComment, commentedAt, children } = commentFile;
 
     await Blog.findOneAndUpdate(
       { _id },
       {
         $push: { comments: commentFile._id },
-        $inc: { "activity.total_comments": 1 },
-        "activity.total_parent_comments": 1,
+        $inc: {
+          "activity.total_comments": 1,
+          "activity.total_parent_comments": 1,
+        },
       }
     );
 
-    let notificationObj = {
+    await new Notification({
       type: "comment",
       blog: _id,
       notification_for: blog_author,
       user: user_id,
       comment: commentFile._id,
-    };
-
-    await new Notification(notificationObj).save();
+    }).save();
 
     return res.status(200).json({
-      comment: savedComment,
-      commentedAt,
-      _id: commentFile._id,
-      user_id,
-      children,
+      comment: populatedComment.comment,
+      commentedAt: populatedComment.commentedAt,
+      _id: populatedComment._id,
+      user_id: populatedComment.commented_by._id,
+      children: populatedComment.children,
+      commented_by: populatedComment.commented_by,
     });
   } catch (error) {
     console.error("Error in Add Comment API:", error.message);

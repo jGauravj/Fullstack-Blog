@@ -79,7 +79,10 @@ const BlogPage = () => {
   }, [blog_id]);
 
   const resetState = () => {
-    setBlog(blogStructure);
+    setBlog({
+      ...blogStructure,
+      comments: { results: [] },
+    });
     setSimilarBlog(null);
     setLoading(true);
     setIsLikeByUser(false);
