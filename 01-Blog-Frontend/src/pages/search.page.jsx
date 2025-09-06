@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import InPageNavigation from "../components/inpage-navigation.component";
 import { useEffect, useState } from "react";
 import { Spinner } from "../common/spinner";
-import AnimationWrapper from "../common/page-Animation";
+import AnimationWrapper from "../common/page-animation";
 import BlogPostCard from "../components/blog-post.component";
 import NoDataMessage from "../components/nodata.component";
 import LoadMoreDataBtn from "../components/load-more.component";
