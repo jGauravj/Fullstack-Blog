@@ -16,6 +16,7 @@ const PublishForm = () => {
     blog,
   } = useContext(EditorContext);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [newTag, setNewTag] = useState("");
   let {
     userAuth: { access_token },
   } = useContext(UserContext);
@@ -62,6 +63,30 @@ const PublishForm = () => {
       }
       e.target.value = "";
     }
+  };
+
+  // add tag
+
+  const handleAddTag = () => {
+    const trimmedTag = newTag.trim();
+    if (!trimmedTag) return;
+
+    if (tags.length >= tagLimit) {
+      toast.error(`You can add max ${tagLimit} Tags`);
+      return;
+    }
+
+    if (tags.includes(trimmedTag)) {
+      toast.error("Tag already added");
+      return;
+    }
+
+    // Create a brand new array and add the tag
+    const updatedTags = [...tags, trimmedTag];
+
+    // Save updated tags in blog state
+    setBlog({ ...blog, tags: updatedTags });
+    setNewTag(""); // Clear input after adding
   };
 
   const publishBlog = async (e) => {
@@ -182,10 +207,18 @@ const PublishForm = () => {
               className=" sticky input-box bg-white top-0 left-0 pl-4 mb-3 placeholder:text-gray-500
                focus:bg-white"
               onKeyDown={handleKeyDown}
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
             />
             {tags.map((tag, index) => {
               return <Tag tag={tag} tagIndex={index} key={index} />;
             })}
+            <button
+              className="mt-2 px-3 py-1 rounded-lg bg-purple-500 text-white hover:bg-indigo-600"
+              onClick={handleAddTag}
+            >
+              Add Tag
+            </button>
           </div>
           <p
             className={`text-sm mt-1 mb-4  text-right ${
